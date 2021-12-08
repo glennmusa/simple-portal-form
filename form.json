@@ -1,0 +1,191 @@
+{
+    "$schema": "<relative path to createFormUI.schema.json>",
+    "view": {
+      "kind": "Form",
+      "properties": {
+        "isWizard": true,
+        "title": "A Simple Form",
+        "steps": [
+          {
+            "name": "basics",
+            "label": "Basics",
+            "elements": [
+              {
+                "name": "basicsDescriptionTextBlock",
+                "type": "Microsoft.Common.TextBlock",
+                "options": {
+                  "text": "This is a simple form that deploys a resource group and a storage account.",
+                  "link": {
+                    "label": "https://github.com/glennmusa/simple-portal-form",
+                    "uri": "https://github.com/glennmusa/simple-portal-form"
+                  }
+                }
+              },
+              {
+                "name": "armApiControls",
+                "label": "",
+                "type": "Microsoft.Common.Section",
+                "elements": [
+                  {
+                    "name": "subscriptionApi",
+                    "type": "Microsoft.Solutions.ArmApiControl",
+                    "request": {
+                      "method": "GET",
+                      "path": "subscriptions?api-version=2020-01-01"
+                    }
+                  },
+                  {
+                    "name": "locationsApi",
+                    "type": "Microsoft.Solutions.ArmApiControl",
+                    "request": {
+                      "method": "GET",
+                      "path": "locations?api-version=2019-11-01"
+                    }
+                  },
+                  {
+                    "name": "storageAccountApi",
+                    "type": "Microsoft.Solutions.ArmApiControl",
+                    "request": {
+                      "method": "POST",
+                      "path": "[concat(steps('basics').subscriptionSection.subscriptionId, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
+                      "body": {
+                        "name": "[steps('basics').storageAccountSection.storageAccountName]",
+                        "type": "Microsoft.Storage/storageAccounts"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "subscriptionSection",
+                "label": "Create a Storage Account in a Resource Group",
+                "type": "Microsoft.Common.Section",
+                "elements": [
+                  {
+                    "name": "subscriptionId",
+                    "label": "Subscription",
+                    "type": "Microsoft.Common.DropDown",
+                    "defaultValue": "",
+                    "toolTip": "Select the Subscription for your resources",
+                    "multiselect": false,
+                    "selectAll": false,
+                    "filter": true,
+                    "filterPlaceholder": "Filter items ...",
+                    "multiLine": true,
+                    "constraints": {
+                      "allowedValues": "[map(steps('basics').armApiControls.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                      "required": true
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "locationSection",
+                "label": "Location",
+                "type": "Microsoft.Common.Section",
+                "elements": [
+                  {
+                    "name": "location",
+                    "label": "Location",
+                    "type": "Microsoft.Common.DropDown",
+                    "defaultValue": "",
+                    "toolTip": "Select the Location for your resources",
+                    "multiselect": false,
+                    "selectAll": false,
+                    "filter": true,
+                    "filterPlaceholder": "Filter items ...",
+                    "multiLine": true,
+                    "constraints": {
+                      "allowedValues": "[map(filter(steps('basics').armApiControls.locationsApi.value,(item) => contains(split('eastus,eastus2,southcentralus,westus,westus2,usgovvirginia,usgovarizona,ussec,usnat', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
+                      "required": true
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "resourceGroupSection",
+                "label": "Resource Group",
+                "type": "Microsoft.Common.Section",
+                "elements": [
+                  {
+                    "name": "resourceGroupName",
+                    "label": "Resource Group Name",
+                    "type": "Microsoft.Common.TextBox",
+                    "defaultValue": "",
+                    "toolTip": "Specify a resource group name to create",
+                    "constraints": {
+                      "required": true,
+                      "validations": [
+                        {
+                          "regex": "^[-\\w\\._\\(\\)]{3,63}$",
+                          "message": "The resource group name must be 3-63 alphanumeric, underscore, parentheses, hyphen, period (except at end), and Unicode characters that match the allowed characters."
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "storageAccountSection",
+                "label": "Storage Account",
+                "type": "Microsoft.Common.Section",
+                "elements": [
+                  {
+                    "name": "storageAccountName",
+                    "label": "Storage Account Name",
+                    "type": "Microsoft.Common.TextBox",
+                    "defaultValue": "",
+                    "toolTip": "Specify a storage account name to create",
+                    "constraints": {
+                      "required": true,
+                      "validations": [
+                        {
+                          "regex": "^[a-z0-9]{3,24}$",
+                          "message": "The storage account name must be between 3-24 lowercase characters and numbers."
+                        },
+                        {
+                          "isValid": "[not(equals(steps('basics').armApiControls.storageAccountApi.nameAvailable, false))]",
+                          "message": "Storage account name currently unavailable. Please choose a different one."
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "tags",
+            "label": "Tags",
+            "subLabel": {
+              "preValidation": "Provide tags that will be used for all resources.",
+              "postValidation": "Done"
+            },
+            "bladeTitle": "Tags",
+            "bladeSubtitle": "Tags",
+            "elements": [
+              {
+                "name": "tagsByResource",
+                "label": "Tags by Resource",
+                "type": "Microsoft.Common.TagsByResource",
+                "visible": true,
+                "resources": [
+                  "SimpleForm"
+                ]
+              }
+            ]
+          }
+        ],
+        "outputs": {
+          "parameters": {
+            "resourceGroupName": "[steps('basics').resourceGroupSection.resourceGroupName]",
+            "storageAccountName": "[steps('basics').storageAccountSection.storageAccountName]",
+            "tags": "[steps('tags').tagsByResource]"
+          },
+          "kind": "Subscription",
+          "location": "[steps('basics').locationSection.location]",
+          "subscriptionId": "[steps('basics').subscriptionSection.subscriptionId]"
+        }
+      }
+    }
+  }
