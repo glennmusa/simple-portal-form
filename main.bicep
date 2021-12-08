@@ -25,7 +25,7 @@ module simpleStorageAccount './modules/storageAccount.bicep' = {
   name: 'simple-sa-${nowUtc}'
   scope: resourceGroup(subscriptionId, resourceGroupName)
   params: {
-    name: take(toLower('${storageAccountName}${uniqueString('foo')}'), 23)
+    name: storageAccountName
     location: location
     skuName: 'Standard_GRS'
     tags: tags
