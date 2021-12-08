@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "2157145698620928591"
+      "templateHash": "893596714135473170"
     }
   },
   "parameters": {
@@ -26,6 +26,10 @@
     },
     "storageAccountName": {
       "type": "string"
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {}
     }
   },
   "functions": [],
@@ -47,6 +51,9 @@
           },
           "location": {
             "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
           }
         },
         "template": {
@@ -103,13 +110,16 @@
         "mode": "Incremental",
         "parameters": {
           "name": {
-            "value": "[parameters('storageAccountName')]"
+            "value": "[take(toLower(format('{0}{1}', parameters('storageAccountName'), uniqueString('foo'))), 23)]"
           },
           "location": {
             "value": "[parameters('location')]"
           },
           "skuName": {
             "value": "Standard_GRS"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
           }
         },
         "template": {
