@@ -9,12 +9,15 @@ param resourceGroupName string
 
 param storageAccountName string
 
+param tags object = {}
+
 module simpleResourceGroup './modules/resourceGroup.bicep' = {
   name: 'simple-rg-${nowUtc}'
   scope: subscription(subscriptionId)
   params: {
     name: resourceGroupName
     location: location
+    tags: tags
   }
 }
 
@@ -25,6 +28,7 @@ module simpleStorageAccount './modules/storageAccount.bicep' = {
     name: storageAccountName
     location: location
     skuName: 'Standard_GRS'
+    tags: tags
   }
   dependsOn: [
     simpleResourceGroup
