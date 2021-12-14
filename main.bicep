@@ -33,7 +33,7 @@ module simpleStorageAccountA './modules/storageAccount.bicep' = {
     tags: tags
   }
   dependsOn: [
-    simpleResourceGroupA
+    resourceGroup(resourceGroupNameA)
   ]
 }
 
@@ -57,6 +57,6 @@ module simpleStorageAccountB './modules/storageAccount.bicep' = {
     tags: tags
   }
   dependsOn: [
-    simpleResourceGroupB
+    resourceGroup(resourceGroupNameA)
   ]
 }
