@@ -5,21 +5,18 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "17276489760832967987"
+      "templateHash": "2802827601044553922"
     }
   },
   "parameters": {
     "location": {
-      "type": "string",
-      "defaultValue": "[deployment().location]"
+      "type": "string"
     },
     "subscriptionIdA": {
-      "type": "string",
-      "defaultValue": "[subscription().subscriptionId]"
+      "type": "string"
     },
     "subscriptionIdB": {
-      "type": "string",
-      "defaultValue": "[subscription().subscriptionId]"
+      "type": "string"
     },
     "resourceGroupNameA": {
       "type": "string"
