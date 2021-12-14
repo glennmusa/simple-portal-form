@@ -222,10 +222,10 @@
     },
     "outputs": {
       "kind": "Subscription",
-      "location": "[steps('basics').locationSection.location]",
+      "location": "eastus",
       "subscriptionId": "[steps('basics').subscriptionSection.subscriptionIdA]",
       "parameters": {
-        "location": "[if(empty(steps('basics').locationSection.location), '', steps('basics').locationSection.location)]",
+        "location": "eastus",
         "subscriptionIdA": "[if(empty(steps('basics').subscriptionSection.subscriptionIdA), '', steps('basics').subscriptionSection.subscriptionIdA)]",
         "subscriptionIdB": "[if(empty(steps('basics').subscriptionSection.subscriptionIdB), '', steps('basics').subscriptionSection.subscriptionIdB)]",
         "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
