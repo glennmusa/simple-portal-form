@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "1128288001206369505"
+      "templateHash": "11029827462164832863"
     }
   },
   "parameters": {
@@ -13,7 +13,11 @@
       "type": "string",
       "defaultValue": "[utcNow()]"
     },
-    "subscriptionId": {
+    "subscriptionIdA": {
+      "type": "string",
+      "defaultValue": "[subscription().subscriptionId]"
+    },
+    "subscriptionIdB": {
       "type": "string",
       "defaultValue": "[subscription().subscriptionId]"
     },
@@ -21,10 +25,16 @@
       "type": "string",
       "defaultValue": "[deployment().location]"
     },
-    "resourceGroupName": {
+    "resourceGroupNameA": {
       "type": "string"
     },
-    "storageAccountName": {
+    "resourceGroupNameB": {
+      "type": "string"
+    },
+    "storageAccountNameA": {
+      "type": "string"
+    },
+    "storageAccountNameB": {
       "type": "string"
     },
     "tags": {
@@ -37,8 +47,8 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "[format('simple-rg-{0}', parameters('nowUtc'))]",
-      "subscriptionId": "[parameters('subscriptionId')]",
+      "name": "[format('simple-rg-a-{0}', parameters('nowUtc'))]",
+      "subscriptionId": "[parameters('subscriptionIdA')]",
       "location": "[deployment().location]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -47,7 +57,7 @@
         "mode": "Incremental",
         "parameters": {
           "name": {
-            "value": "[parameters('resourceGroupName')]"
+            "value": "[parameters('resourceGroupNameA')]"
           },
           "location": {
             "value": "[parameters('location')]"
@@ -100,9 +110,9 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "[format('simple-sa-{0}', parameters('nowUtc'))]",
-      "subscriptionId": "[parameters('subscriptionId')]",
-      "resourceGroup": "[parameters('resourceGroupName')]",
+      "name": "[format('simple-sa-a-{0}', parameters('nowUtc'))]",
+      "subscriptionId": "[parameters('subscriptionIdA')]",
+      "resourceGroup": "[parameters('resourceGroupNameA')]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -110,7 +120,7 @@
         "mode": "Incremental",
         "parameters": {
           "name": {
-            "value": "[parameters('storageAccountName')]"
+            "value": "[parameters('storageAccountNameA')]"
           },
           "location": {
             "value": "[parameters('location')]"
@@ -170,7 +180,146 @@
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId(parameters('subscriptionId'), 'Microsoft.Resources/deployments', format('simple-rg-{0}', parameters('nowUtc')))]"
+        "[subscriptionResourceId(parameters('subscriptionIdA'), 'Microsoft.Resources/deployments', format('simple-rg-a-{0}', parameters('nowUtc')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[format('simple-rg-b-{0}', parameters('nowUtc'))]",
+      "subscriptionId": "[parameters('subscriptionIdB')]",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[parameters('resourceGroupNameB')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "4820223264851650305"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {}
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Resources/resourceGroups",
+              "apiVersion": "2019-05-01",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]"
+            }
+          ],
+          "outputs": {
+            "id": {
+              "type": "string",
+              "value": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('name'))]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[format('simple-sa-b-{0}', parameters('nowUtc'))]",
+      "subscriptionId": "[parameters('subscriptionIdB')]",
+      "resourceGroup": "[parameters('resourceGroupNameB')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[parameters('storageAccountNameB')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "skuName": {
+            "value": "Standard_GRS"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "13063224741031050348"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "skuName": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {}
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2019-06-01",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "kind": "Storage",
+              "sku": {
+                "name": "[parameters('skuName')]"
+              },
+              "tags": "[parameters('tags')]"
+            }
+          ],
+          "outputs": {
+            "id": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId(parameters('subscriptionIdB'), 'Microsoft.Resources/deployments', format('simple-rg-b-{0}', parameters('nowUtc')))]"
       ]
     }
   ]
