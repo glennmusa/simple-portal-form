@@ -1,9 +1,9 @@
 targetScope = 'subscription'
 
+param location string = deployment().location
+
 param subscriptionIdA string = subscription().subscriptionId
 param subscriptionIdB string = subscription().subscriptionId
-
-param location string = deployment().location
 
 param resourceGroupNameA string
 param resourceGroupNameB string

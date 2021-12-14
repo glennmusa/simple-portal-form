@@ -246,11 +246,12 @@
       "location": "[steps('basics').locationSection.location]",
       "subscriptionId": "[steps('basics').subscriptionSection.subscriptionIdA]",
       "parameters": {
+        "location": "[steps('basics').locationSection.location]",
         "subscriptionIdA": "[steps('basics').subscriptionSection.subscriptionIdA]",
-        "resourceGroupNameA": "[steps('basics').resourceGroupSection.resourceGroupNameA]",
-        "storageAccountNameA": "[steps('basics').storageAccountSection.storageAccountNameA]",
         "subscriptionIdB": "[steps('basics').subscriptionSection.subscriptionIdB]",
+        "resourceGroupNameA": "[steps('basics').resourceGroupSection.resourceGroupNameA]",
         "resourceGroupNameB": "[steps('basics').resourceGroupSection.resourceGroupNameB]",
+        "storageAccountNameA": "[steps('basics').storageAccountSection.storageAccountNameA]",
         "storageAccountNameB": "[steps('basics').storageAccountSection.storageAccountNameB]",
         "tags": "[steps('tags').tagsByResource]"
       }
