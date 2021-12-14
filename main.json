@@ -5,14 +5,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "11029827462164832863"
+      "templateHash": "1575500649363967672"
     }
   },
   "parameters": {
-    "nowUtc": {
-      "type": "string",
-      "defaultValue": "[utcNow()]"
-    },
     "subscriptionIdA": {
       "type": "string",
       "defaultValue": "[subscription().subscriptionId]"
@@ -47,7 +43,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "[format('simple-rg-a-{0}', parameters('nowUtc'))]",
+      "name": "simple-rg-a",
       "subscriptionId": "[parameters('subscriptionIdA')]",
       "location": "[deployment().location]",
       "properties": {
@@ -110,7 +106,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "[format('simple-sa-a-{0}', parameters('nowUtc'))]",
+      "name": "simple-sa-a",
       "subscriptionId": "[parameters('subscriptionIdA')]",
       "resourceGroup": "[parameters('resourceGroupNameA')]",
       "properties": {
@@ -180,13 +176,13 @@
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId(parameters('subscriptionIdA'), 'Microsoft.Resources/deployments', format('simple-rg-a-{0}', parameters('nowUtc')))]"
+        "[subscriptionResourceId(parameters('subscriptionIdA'), 'Microsoft.Resources/deployments', 'simple-rg-a')]"
       ]
     },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "[format('simple-rg-b-{0}', parameters('nowUtc'))]",
+      "name": "simple-rg-b",
       "subscriptionId": "[parameters('subscriptionIdB')]",
       "location": "[deployment().location]",
       "properties": {
@@ -249,7 +245,7 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "[format('simple-sa-b-{0}', parameters('nowUtc'))]",
+      "name": "simple-sa-b",
       "subscriptionId": "[parameters('subscriptionIdB')]",
       "resourceGroup": "[parameters('resourceGroupNameB')]",
       "properties": {
@@ -319,7 +315,7 @@
         }
       },
       "dependsOn": [
-        "[subscriptionResourceId(parameters('subscriptionIdB'), 'Microsoft.Resources/deployments', format('simple-rg-b-{0}', parameters('nowUtc')))]"
+        "[subscriptionResourceId(parameters('subscriptionIdB'), 'Microsoft.Resources/deployments', 'simple-rg-b')]"
       ]
     }
   ]

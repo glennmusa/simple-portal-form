@@ -1,7 +1,5 @@
 targetScope = 'subscription'
 
-param nowUtc string = utcNow()
-
 param subscriptionIdA string = subscription().subscriptionId
 param subscriptionIdB string = subscription().subscriptionId
 
@@ -16,7 +14,7 @@ param storageAccountNameB string
 param tags object = {}
 
 module simpleResourceGroupA './modules/resourceGroup.bicep' = {
-  name: 'simple-rg-a-${nowUtc}'
+  name: 'simple-rg-a'
   scope: subscription(subscriptionIdA)
   params: {
     name: resourceGroupNameA
@@ -26,7 +24,7 @@ module simpleResourceGroupA './modules/resourceGroup.bicep' = {
 }
 
 module simpleStorageAccountA './modules/storageAccount.bicep' = {
-  name: 'simple-sa-a-${nowUtc}'
+  name: 'simple-sa-a'
   scope: resourceGroup(subscriptionIdA, resourceGroupNameA)
   params: {
     name: storageAccountNameA
@@ -40,7 +38,7 @@ module simpleStorageAccountA './modules/storageAccount.bicep' = {
 }
 
 module simpleResourceGroupB './modules/resourceGroup.bicep' = {
-  name: 'simple-rg-b-${nowUtc}'
+  name: 'simple-rg-b'
   scope: subscription(subscriptionIdB)
   params: {
     name: resourceGroupNameB
@@ -50,7 +48,7 @@ module simpleResourceGroupB './modules/resourceGroup.bicep' = {
 }
 
 module simpleStorageAccountB './modules/storageAccount.bicep' = {
-  name: 'simple-sa-b-${nowUtc}'
+  name: 'simple-sa-b'
   scope: resourceGroup(subscriptionIdB, resourceGroupNameB)
   params: {
     name: storageAccountNameB
