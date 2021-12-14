@@ -124,7 +124,7 @@
                   "filterPlaceholder": "Filter items ...",
                   "multiLine": true,
                   "constraints": {
-                    "allowedValues": "[map(filter(steps('basics').armApiControls.locationsApi.value,(item) => contains(split('eastus,eastus2,southcentralus,westus,westus2,usgovvirginia,usgovarizona,ussec,usnat', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
+                    "allowedValues": "[map(steps('basics').armApiControls.locationsApi.value, (item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
                     "required": true
                   }
                 }
