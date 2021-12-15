@@ -1,9 +1,12 @@
 targetScope = 'subscription'
 
-param location string
+param location string = deployment().location
 
-param subscriptionIdA string
+param subscriptionIdA string = subscription().subscriptionId
+param subscriptionIdB string = subscription().subscriptionId
+
 param resourceGroupNameA string
+param resourceGroupNameB string
 
 module simpleResourceGroupA './modules/resourceGroup.bicep' = {
   name: 'simple-rg-a'
@@ -13,3 +16,46 @@ module simpleResourceGroupA './modules/resourceGroup.bicep' = {
     location: location
   }
 }
+
+module simpleResourceGroupB './modules/resourceGroup.bicep' = {
+  name: 'simple-rg-b'
+  scope: subscription(subscriptionIdB)
+  params: {
+    name: resourceGroupNameB
+    location: location
+  }
+}
+
+/*
+param storageAccountNameA string
+param storageAccountNameB string
+
+var storageAccountSkuName = 'Standard_GRS'
+
+module simpleStorageAccountA './modules/storageAccount.bicep' = {
+  name: 'simple-sa-a'
+  scope: resourceGroup(subscriptionIdA, resourceGroupNameA)
+  params: {
+    name: storageAccountNameA
+    location: location
+    skuName: storageAccountSkuName
+  }
+  dependsOn: [
+    simpleResourceGroupA
+  ]
+}
+
+module simpleStorageAccountB './modules/storageAccount.bicep' = {
+  name: 'simple-sa-b'
+  scope: resourceGroup(subscriptionIdB, resourceGroupNameB)
+  params: {
+    name: storageAccountNameB
+    location: location
+    skuName: storageAccountSkuName
+  }
+  dependsOn: [
+    simpleResourceGroupB
+  ]
+}
+
+*/

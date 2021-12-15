@@ -5,17 +5,26 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "2272930104446502080"
+      "templateHash": "11381531161711271148"
     }
   },
   "parameters": {
     "location": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "[deployment().location]"
     },
     "subscriptionIdA": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "[subscription().subscriptionId]"
+    },
+    "subscriptionIdB": {
+      "type": "string",
+      "defaultValue": "[subscription().subscriptionId]"
     },
     "resourceGroupNameA": {
+      "type": "string"
+    },
+    "resourceGroupNameB": {
       "type": "string"
     }
   },
@@ -35,6 +44,66 @@
         "parameters": {
           "name": {
             "value": "[parameters('resourceGroupNameA')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.4.1008.15138",
+              "templateHash": "4820223264851650305"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "object",
+              "defaultValue": {}
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Resources/resourceGroups",
+              "apiVersion": "2019-05-01",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('tags')]"
+            }
+          ],
+          "outputs": {
+            "id": {
+              "type": "string",
+              "value": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('name'))]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "simple-rg-b",
+      "subscriptionId": "[parameters('subscriptionIdB')]",
+      "location": "[deployment().location]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[parameters('resourceGroupNameB')]"
           },
           "location": {
             "value": "[parameters('location')]"

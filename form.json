@@ -13,7 +13,7 @@
               "name": "basicsDescriptionTextBlock",
               "type": "Microsoft.Common.TextBlock",
               "options": {
-                "text": "This is a simple form deploys a resource group (and uses subscription GET .id but the outputs trim `/subscriptions/` from that property).",
+                "text": "This is a simple form deploys a resource group (and adds another subscription).",
                 "link": {
                   "label": "https://github.com/glennmusa/simple-portal-form",
                   "uri": "https://github.com/glennmusa/simple-portal-form"
@@ -36,6 +36,22 @@
                 {
                   "name": "subscriptionId",
                   "label": "Subscription A",
+                  "type": "Microsoft.Common.DropDown",
+                  "defaultValue": "",
+                  "toolTip": "Select the Subscription for your resources",
+                  "multiselect": false,
+                  "selectAll": false,
+                  "filter": true,
+                  "filterPlaceholder": "Filter items ...",
+                  "multiLine": true,
+                  "constraints": {
+                    "allowedValues": "[map(steps('basics').deploymentDetails.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                    "required": true
+                  }
+                },
+                {
+                  "name": "subscriptionIdB",
+                  "label": "Subscription B",
                   "type": "Microsoft.Common.DropDown",
                   "defaultValue": "",
                   "toolTip": "Select the Subscription for your resources",
@@ -96,6 +112,22 @@
                       }
                     ]
                   }
+                },
+                {
+                  "name": "resourceGroupNameB",
+                  "label": "Resource Group Name B",
+                  "type": "Microsoft.Common.TextBox",
+                  "defaultValue": "",
+                  "toolTip": "Specify a resource group name to create",
+                  "constraints": {
+                    "required": true,
+                    "validations": [
+                      {
+                        "regex": "^[-\\w\\._\\(\\)]{3,63}$",
+                        "message": "The resource group name must be 3-63 alphanumeric, underscore, parentheses, hyphen, period (except at end), and Unicode characters that match the allowed characters."
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -110,7 +142,9 @@
       "parameters": {
         "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
         "subscriptionIdA": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionId, '/subscriptions/', ''))]",
-        "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]"
+        "subscriptionIdB": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionIdB, '/subscriptions/', ''))]",
+        "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
+        "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]"
       }
     }
   }
