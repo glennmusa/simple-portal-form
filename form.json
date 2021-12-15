@@ -3,7 +3,6 @@
   "view": {
     "kind": "Form",
     "properties": {
-      "isWizard": true,
       "title": "A Simple Form",
       "steps": [
         {
