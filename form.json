@@ -13,7 +13,7 @@
               "name": "basicsDescriptionTextBlock",
               "type": "Microsoft.Common.TextBlock",
               "options": {
-                "text": "This is a simple form that is not a wizard that deploys a resource group and a storage account.",
+                "text": "This is a simple form deploys a resource group.",
                 "link": {
                   "label": "https://github.com/glennmusa/simple-portal-form",
                   "uri": "https://github.com/glennmusa/simple-portal-form"
@@ -21,8 +21,8 @@
               }
             },
             {
-              "name": "armApiControls",
-              "label": "",
+              "name": "deploymentDetails",
+              "label": "Create a Storage Account in a Resource Group",
               "type": "Microsoft.Common.Section",
               "elements": [
                 {
@@ -32,16 +32,9 @@
                     "method": "GET",
                     "path": "subscriptions?api-version=2020-01-01"
                   }
-                }
-              ]
-            },
-            {
-              "name": "subscriptionSection",
-              "label": "Create a Storage Account in a Resource Group",
-              "type": "Microsoft.Common.Section",
-              "elements": [
+                },
                 {
-                  "name": "subscriptionIdA",
+                  "name": "subscriptionId",
                   "label": "Subscription A",
                   "type": "Microsoft.Common.DropDown",
                   "defaultValue": "",
@@ -52,7 +45,32 @@
                   "filterPlaceholder": "Filter items ...",
                   "multiLine": true,
                   "constraints": {
-                    "allowedValues": "[map(steps('basics').armApiControls.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.subscriptionId, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                    "allowedValues": "[map(steps('basics').deploymentDetails.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                    "required": true
+                  }
+                },
+                {
+                  "name": "locationsApi",
+                  "type": "Microsoft.Solutions.ArmApiControl",
+                  "request": {
+                    "method": "GET",
+                    "path": "locations?api-version=2019-11-01"
+                  }
+                },
+                {
+                  "name": "locationName",
+                  "label": "Location",
+                  "type": "Microsoft.Common.DropDown",
+                  "visible": true,
+                  "defaultValue": "",
+                  "toolTip": "Select the Location for your Data Landing Zone.",
+                  "multiselect": false,
+                  "selectAll": false,
+                  "filter": true,
+                  "filterPlaceholder": "Filter items ...",
+                  "multiLine": true,
+                  "constraints": {
+                    "allowedValues": "[map(filter(steps('basics').deploymentDetails.locationsApi.value,(item) => contains(split('southafricanorth,southeastasia,japaneast,canadacentral,northeurope,westeurope,francecentral,germanywestcentral,uksouth,centralus,eastus,eastus2,southcentralus,westus2', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
                     "required": true
                   }
                 }
@@ -87,11 +105,10 @@
     },
     "outputs": {
       "kind": "Subscription",
-      "location": "eastus",
-      "subscriptionId": "[steps('basics').subscriptionSection.subscriptionIdA]",
+      "location": "[steps('basics').deploymentDetails.locationName]",
+      "subscriptionId": "[steps('basics').deploymentDetails.subscriptionId]",
       "parameters": {
-        "location": "eastus",
-        "subscriptionIdA": "[if(empty(steps('basics').subscriptionSection.subscriptionIdA), '', steps('basics').subscriptionSection.subscriptionIdA)]",
+        "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
         "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]"
       }
     }
