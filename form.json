@@ -35,14 +35,6 @@
                   }
                 },
                 {
-                  "name": "locationsApi",
-                  "type": "Microsoft.Solutions.ArmApiControl",
-                  "request": {
-                    "method": "GET",
-                    "path": "locations?api-version=2019-11-01"
-                  }
-                },
-                {
                   "name": "storageAccountApiA",
                   "type": "Microsoft.Solutions.ArmApiControl",
                   "request": {
@@ -102,29 +94,6 @@
                   "multiLine": true,
                   "constraints": {
                     "allowedValues": "[map(steps('basics').armApiControls.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.subscriptionId, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
-                    "required": true
-                  }
-                }
-              ]
-            },
-            {
-              "name": "locationSection",
-              "label": "Location",
-              "type": "Microsoft.Common.Section",
-              "elements": [
-                {
-                  "name": "location",
-                  "label": "Location",
-                  "type": "Microsoft.Common.DropDown",
-                  "defaultValue": "",
-                  "toolTip": "Select the Location for your resources",
-                  "multiselect": false,
-                  "selectAll": false,
-                  "filter": true,
-                  "filterPlaceholder": "Filter items ...",
-                  "multiLine": true,
-                  "constraints": {
-                    "allowedValues": "[map(steps('basics').armApiControls.locationsApi.value, (item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
                     "required": true
                   }
                 }
