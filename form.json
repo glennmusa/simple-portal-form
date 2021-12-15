@@ -33,30 +33,6 @@
                     "method": "GET",
                     "path": "subscriptions?api-version=2020-01-01"
                   }
-                },
-                {
-                  "name": "storageAccountApiA",
-                  "type": "Microsoft.Solutions.ArmApiControl",
-                  "request": {
-                    "method": "POST",
-                    "path": "[concat(steps('basics').subscriptionSection.subscriptionIdA, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
-                    "body": {
-                      "name": "[steps('basics').storageAccountSection.storageAccountNameA]",
-                      "type": "Microsoft.Storage/storageAccounts"
-                    }
-                  }
-                },
-                {
-                  "name": "storageAccountApiB",
-                  "type": "Microsoft.Solutions.ArmApiControl",
-                  "request": {
-                    "method": "POST",
-                    "path": "[concat(steps('basics').subscriptionSection.subscriptionIdB, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
-                    "body": {
-                      "name": "[steps('basics').storageAccountSection.storageAccountNameB]",
-                      "type": "Microsoft.Storage/storageAccounts"
-                    }
-                  }
                 }
               ]
             },
@@ -137,53 +113,6 @@
                   }
                 }
               ]
-            },
-            {
-              "name": "storageAccountSection",
-              "label": "Storage Account A",
-              "type": "Microsoft.Common.Section",
-              "elements": [
-                {
-                  "name": "storageAccountNameA",
-                  "label": "Storage Account Name",
-                  "type": "Microsoft.Common.TextBox",
-                  "defaultValue": "",
-                  "toolTip": "Specify a storage account name to create",
-                  "constraints": {
-                    "required": true,
-                    "validations": [
-                      {
-                        "regex": "^[a-z0-9]{3,24}$",
-                        "message": "The storage account name must be between 3-24 lowercase characters and numbers."
-                      },
-                      {
-                        "isValid": "[not(equals(steps('basics').armApiControls.storageAccountApiA.nameAvailable, false))]",
-                        "message": "Storage account name currently unavailable. Please choose a different one."
-                      }
-                    ]
-                  }
-                },
-                {
-                  "name": "storageAccountNameB",
-                  "label": "Storage Account Name",
-                  "type": "Microsoft.Common.TextBox",
-                  "defaultValue": "",
-                  "toolTip": "Specify a storage account name to create",
-                  "constraints": {
-                    "required": true,
-                    "validations": [
-                      {
-                        "regex": "^[a-z0-9]{3,24}$",
-                        "message": "The storage account name must be between 3-24 lowercase characters and numbers."
-                      },
-                      {
-                        "isValid": "[not(equals(steps('basics').armApiControls.storageAccountApiB.nameAvailable, false))]",
-                        "message": "Storage account name currently unavailable. Please choose a different one."
-                      }
-                    ]
-                  }
-                }
-              ]
             }
           ]
         }
@@ -198,10 +127,8 @@
         "subscriptionIdA": "[if(empty(steps('basics').subscriptionSection.subscriptionIdA), '', steps('basics').subscriptionSection.subscriptionIdA)]",
         "subscriptionIdB": "[if(empty(steps('basics').subscriptionSection.subscriptionIdB), '', steps('basics').subscriptionSection.subscriptionIdB)]",
         "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
-        "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]",
-        "storageAccountNameA": "[if(empty(steps('basics').storageAccountSection.storageAccountNameA), '', steps('basics').storageAccountSection.storageAccountNameA)]",
-        "storageAccountNameB": "[if(empty(steps('basics').storageAccountSection.storageAccountNameB), '', steps('basics').storageAccountSection.storageAccountNameB)]"
-      }
+        "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]"
+        }
     }
   }
 }

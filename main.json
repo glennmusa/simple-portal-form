@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "2802827601044553922"
+      "templateHash": "12626020401091390473"
     }
   },
   "parameters": {
@@ -22,12 +22,6 @@
       "type": "string"
     },
     "resourceGroupNameB": {
-      "type": "string"
-    },
-    "storageAccountNameA": {
-      "type": "string"
-    },
-    "storageAccountNameB": {
       "type": "string"
     },
     "tags": {
@@ -103,82 +97,6 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
-      "name": "simple-sa-a",
-      "subscriptionId": "[parameters('subscriptionIdA')]",
-      "resourceGroup": "[parameters('resourceGroupNameA')]",
-      "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
-        },
-        "mode": "Incremental",
-        "parameters": {
-          "name": {
-            "value": "[parameters('storageAccountNameA')]"
-          },
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "skuName": {
-            "value": "Standard_GRS"
-          },
-          "tags": {
-            "value": "[parameters('tags')]"
-          }
-        },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.4.1008.15138",
-              "templateHash": "13063224741031050348"
-            }
-          },
-          "parameters": {
-            "name": {
-              "type": "string"
-            },
-            "location": {
-              "type": "string"
-            },
-            "skuName": {
-              "type": "string"
-            },
-            "tags": {
-              "type": "object",
-              "defaultValue": {}
-            }
-          },
-          "functions": [],
-          "resources": [
-            {
-              "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2019-06-01",
-              "name": "[parameters('name')]",
-              "location": "[parameters('location')]",
-              "kind": "Storage",
-              "sku": {
-                "name": "[parameters('skuName')]"
-              },
-              "tags": "[parameters('tags')]"
-            }
-          ],
-          "outputs": {
-            "id": {
-              "type": "string",
-              "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]"
-            }
-          }
-        }
-      },
-      "dependsOn": [
-        "[subscriptionResourceId(parameters('subscriptionIdA'), 'Microsoft.Resources/deployments', 'simple-rg-a')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
       "name": "simple-rg-b",
       "subscriptionId": "[parameters('subscriptionIdB')]",
       "location": "[deployment().location]",
@@ -238,82 +156,6 @@
           }
         }
       }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
-      "name": "simple-sa-b",
-      "subscriptionId": "[parameters('subscriptionIdB')]",
-      "resourceGroup": "[parameters('resourceGroupNameB')]",
-      "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
-        },
-        "mode": "Incremental",
-        "parameters": {
-          "name": {
-            "value": "[parameters('storageAccountNameB')]"
-          },
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "skuName": {
-            "value": "Standard_GRS"
-          },
-          "tags": {
-            "value": "[parameters('tags')]"
-          }
-        },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.4.1008.15138",
-              "templateHash": "13063224741031050348"
-            }
-          },
-          "parameters": {
-            "name": {
-              "type": "string"
-            },
-            "location": {
-              "type": "string"
-            },
-            "skuName": {
-              "type": "string"
-            },
-            "tags": {
-              "type": "object",
-              "defaultValue": {}
-            }
-          },
-          "functions": [],
-          "resources": [
-            {
-              "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2019-06-01",
-              "name": "[parameters('name')]",
-              "location": "[parameters('location')]",
-              "kind": "Storage",
-              "sku": {
-                "name": "[parameters('skuName')]"
-              },
-              "tags": "[parameters('tags')]"
-            }
-          ],
-          "outputs": {
-            "id": {
-              "type": "string",
-              "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('name'))]"
-            }
-          }
-        }
-      },
-      "dependsOn": [
-        "[subscriptionResourceId(parameters('subscriptionIdB'), 'Microsoft.Resources/deployments', 'simple-rg-b')]"
-      ]
     }
   ]
 }
