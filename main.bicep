@@ -8,6 +8,11 @@ param subscriptionIdB string = subscription().subscriptionId
 param resourceGroupNameA string
 param resourceGroupNameB string
 
+param storageAccountNameA string
+param storageAccountNameB string
+
+var storageAccountSkuName = 'Standard_GRS'
+
 module simpleResourceGroupA './modules/resourceGroup.bicep' = {
   name: 'simple-rg-a'
   scope: subscription(subscriptionIdA)
@@ -25,12 +30,6 @@ module simpleResourceGroupB './modules/resourceGroup.bicep' = {
     location: location
   }
 }
-
-/*
-param storageAccountNameA string
-param storageAccountNameB string
-
-var storageAccountSkuName = 'Standard_GRS'
 
 module simpleStorageAccountA './modules/storageAccount.bicep' = {
   name: 'simple-sa-a'
@@ -57,5 +56,3 @@ module simpleStorageAccountB './modules/storageAccount.bicep' = {
     simpleResourceGroupB
   ]
 }
-
-*/

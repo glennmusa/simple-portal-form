@@ -13,7 +13,7 @@
               "name": "basicsDescriptionTextBlock",
               "type": "Microsoft.Common.TextBlock",
               "options": {
-                "text": "This is a simple form deploys a resource group (and adds another subscription).",
+                "text": "This is a simple form deploys a resource group and a storage account into an arbitraty subscription.",
                 "link": {
                   "label": "https://github.com/glennmusa/simple-portal-form",
                   "uri": "https://github.com/glennmusa/simple-portal-form"
@@ -21,8 +21,8 @@
               }
             },
             {
-              "name": "deploymentDetails",
-              "label": "Create a Storage Account in a Resource Group",
+              "name": "armApiControls",
+              "label": "",
               "type": "Microsoft.Common.Section",
               "elements": [
                 {
@@ -33,6 +33,45 @@
                     "path": "subscriptions?api-version=2020-01-01"
                   }
                 },
+                {
+                  "name": "locationsApi",
+                  "type": "Microsoft.Solutions.ArmApiControl",
+                  "request": {
+                    "method": "GET",
+                    "path": "locations?api-version=2019-11-01"
+                  }
+                },
+                {
+                  "name": "storageAccountApiA",
+                  "type": "Microsoft.Solutions.ArmApiControl",
+                  "request": {
+                    "method": "POST",
+                    "path": "[concat(steps('basics').deploymentDetails.subscriptionId, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
+                    "body": {
+                      "name": "[steps('basics').storageAccountSection.storageAccountNameA]",
+                      "type": "Microsoft.Storage/storageAccounts"
+                    }
+                  }
+                },
+                {
+                  "name": "storageAccountApiB",
+                  "type": "Microsoft.Solutions.ArmApiControl",
+                  "request": {
+                    "method": "POST",
+                    "path": "[concat(steps('basics').deploymentDetails.subscriptionIdB, '/providers/Microsoft.Storage/checkNameAvailability?api-version=2021-04-01')]",
+                    "body": {
+                      "name": "[steps('basics').storageAccountSection.storageAccountNameB]",
+                      "type": "Microsoft.Storage/storageAccounts"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "name": "deploymentDetails",
+              "label": "Create a Storage Account in a Resource Group",
+              "type": "Microsoft.Common.Section",
+              "elements": [
                 {
                   "name": "subscriptionId",
                   "label": "Subscription A",
@@ -45,7 +84,7 @@
                   "filterPlaceholder": "Filter items ...",
                   "multiLine": true,
                   "constraints": {
-                    "allowedValues": "[map(steps('basics').deploymentDetails.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                    "allowedValues": "[map(steps('basics').armApiControls.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
                     "required": true
                   }
                 },
@@ -61,16 +100,8 @@
                   "filterPlaceholder": "Filter items ...",
                   "multiLine": true,
                   "constraints": {
-                    "allowedValues": "[map(steps('basics').deploymentDetails.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
+                    "allowedValues": "[map(steps('basics').armApiControls.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.id, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
                     "required": true
-                  }
-                },
-                {
-                  "name": "locationsApi",
-                  "type": "Microsoft.Solutions.ArmApiControl",
-                  "request": {
-                    "method": "GET",
-                    "path": "locations?api-version=2019-11-01"
                   }
                 },
                 {
@@ -86,7 +117,7 @@
                   "filterPlaceholder": "Filter items ...",
                   "multiLine": true,
                   "constraints": {
-                    "allowedValues": "[map(filter(steps('basics').deploymentDetails.locationsApi.value,(item) => contains(split('southafricanorth,southeastasia,japaneast,canadacentral,northeurope,westeurope,francecentral,germanywestcentral,uksouth,centralus,eastus,eastus2,southcentralus,westus2', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
+                    "allowedValues": "[map(filter(steps('basics').armApiControls.locationsApi.value,(item) => contains(split('southafricanorth,southeastasia,japaneast,canadacentral,northeurope,westeurope,francecentral,germanywestcentral,uksouth,centralus,eastus,eastus2,southcentralus,westus2', ','), item.name)),(item) => parse(concat('{\"label\":\"', item.regionalDisplayName, '\",\"value\":\"', item.name, '\"}')))]",
                     "required": true
                   }
                 }
@@ -130,22 +161,71 @@
                   }
                 }
               ]
+            },
+            {
+              "name": "storageAccountSection",
+              "label": "Storage Account A",
+              "type": "Microsoft.Common.Section",
+              "elements": [
+                {
+                  "name": "storageAccountNameA",
+                  "label": "Storage Account Name",
+                  "type": "Microsoft.Common.TextBox",
+                  "defaultValue": "",
+                  "toolTip": "Specify a storage account name to create",
+                  "constraints": {
+                    "required": true,
+                    "validations": [
+                      {
+                        "regex": "^[a-z0-9]{3,24}$",
+                        "message": "The storage account name must be between 3-24 lowercase characters and numbers."
+                      },
+                      {
+                        "isValid": "[not(equals(steps('basics').armApiControls.storageAccountApiA.nameAvailable, false))]",
+                        "message": "Storage account name currently unavailable. Please choose a different one."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "name": "storageAccountNameB",
+                  "label": "Storage Account Name",
+                  "type": "Microsoft.Common.TextBox",
+                  "defaultValue": "",
+                  "toolTip": "Specify a storage account name to create",
+                  "constraints": {
+                    "required": true,
+                    "validations": [
+                      {
+                        "regex": "^[a-z0-9]{3,24}$",
+                        "message": "The storage account name must be between 3-24 lowercase characters and numbers."
+                      },
+                      {
+                        "isValid": "[not(equals(steps('basics').armApiControls.storageAccountApiB.nameAvailable, false))]",
+                        "message": "Storage account name currently unavailable. Please choose a different one."
+                      }
+                    ]
+                  }
+                }
+              ]
             }
           ]
         }
       ]
-    },
-    "outputs": {
-      "kind": "Subscription",
-      "location": "[steps('basics').deploymentDetails.locationName]",
-      "subscriptionId": "[steps('basics').deploymentDetails.subscriptionId]",
-      "parameters": {
-        "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
-        "subscriptionIdA": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionId, '/subscriptions/', ''))]",
-        "subscriptionIdB": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionIdB, '/subscriptions/', ''))]",
-        "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
-        "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]"
-      }
+    }
+  },
+  "outputs": {
+    "kind": "Subscription",
+    "location": "[steps('basics').deploymentDetails.locationName]",
+    "subscriptionId": "[steps('basics').deploymentDetails.subscriptionId]",
+    "parameters": {
+      "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
+      "subscriptionIdA": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionId, '/subscriptions/', ''))]",
+      "subscriptionIdB": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionIdB, '/subscriptions/', ''))]",
+      "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
+      "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]",
+      "storageAccountNameA": "[if(empty(steps('basics').storageAccountSection.storageAccountNameA), '', steps('basics').storageAccountSection.storageAccountNameA)]",
+      "storageAccountNameB": "[if(empty(steps('basics').storageAccountSection.storageAccountNameB), '', steps('basics').storageAccountSection.storageAccountNameB)]"
     }
   }
 }
