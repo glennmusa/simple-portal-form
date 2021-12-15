@@ -246,7 +246,7 @@
         "resourceGroupNameB": "[steps('basics').resourceGroupSection.resourceGroupNameB]",
         "storageAccountNameA": "[steps('basics').storageAccountSection.storageAccountNameA]",
         "storageAccountNameB": "[steps('basics').storageAccountSection.storageAccountNameB]",
-        "tags": "[steps('tags').tagsByResource]"
+        "tags": "[if(not(contains(steps('tags').tagsByResource, 'SimpleForm')), parse('{}'), first(map(parse(concat('[', string(steps('tags').tagsByResource), ']')), (item) => item.SimpleForm)))]"
       }
     }
   }

@@ -11,6 +11,8 @@ param resourceGroupNameB string
 param storageAccountNameA string
 param storageAccountNameB string
 
+param tags object = {}
+
 var storageAccountSkuName = 'Standard_GRS'
 
 module simpleResourceGroupA './modules/resourceGroup.bicep' = {
@@ -19,6 +21,7 @@ module simpleResourceGroupA './modules/resourceGroup.bicep' = {
   params: {
     name: resourceGroupNameA
     location: location
+    tags: tags
   }
 }
 
@@ -28,6 +31,7 @@ module simpleResourceGroupB './modules/resourceGroup.bicep' = {
   params: {
     name: resourceGroupNameB
     location: location
+    tags: tags
   }
 }
 
@@ -38,6 +42,7 @@ module simpleStorageAccountA './modules/storageAccount.bicep' = {
     name: storageAccountNameA
     location: location
     skuName: storageAccountSkuName
+    tags: tags
   }
   dependsOn: [
     simpleResourceGroupA
@@ -51,6 +56,7 @@ module simpleStorageAccountB './modules/storageAccount.bicep' = {
     name: storageAccountNameB
     location: location
     skuName: storageAccountSkuName
+    tags: tags
   }
   dependsOn: [
     simpleResourceGroupB

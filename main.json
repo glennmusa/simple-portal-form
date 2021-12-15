@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "14464277748728316288"
+      "templateHash": "5530054825555023348"
     }
   },
   "parameters": {
@@ -32,6 +32,10 @@
     },
     "storageAccountNameB": {
       "type": "string"
+    },
+    "tags": {
+      "type": "object",
+      "defaultValue": {}
     }
   },
   "functions": [],
@@ -56,6 +60,9 @@
           },
           "location": {
             "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
           }
         },
         "template": {
@@ -116,6 +123,9 @@
           },
           "location": {
             "value": "[parameters('location')]"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
           }
         },
         "template": {
@@ -179,6 +189,9 @@
           },
           "skuName": {
             "value": "[variables('storageAccountSkuName')]"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
           }
         },
         "template": {
@@ -252,6 +265,9 @@
           },
           "skuName": {
             "value": "[variables('storageAccountSkuName')]"
+          },
+          "tags": {
+            "value": "[parameters('tags')]"
           }
         },
         "template": {
