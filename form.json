@@ -13,7 +13,7 @@
               "name": "basicsDescriptionTextBlock",
               "type": "Microsoft.Common.TextBlock",
               "options": {
-                "text": "This is a simple form deploys a resource group.",
+                "text": "This is a simple form deploys a resource group (and uses a subscription ID parameter).",
                 "link": {
                   "label": "https://github.com/glennmusa/simple-portal-form",
                   "uri": "https://github.com/glennmusa/simple-portal-form"
