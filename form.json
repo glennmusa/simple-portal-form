@@ -56,22 +56,6 @@
                     "allowedValues": "[map(steps('basics').armApiControls.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.subscriptionId, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
                     "required": true
                   }
-                },
-                {
-                  "name": "subscriptionIdB",
-                  "label": "Subscription B",
-                  "type": "Microsoft.Common.DropDown",
-                  "defaultValue": "",
-                  "toolTip": "Select the Subscription for your resources",
-                  "multiselect": false,
-                  "selectAll": false,
-                  "filter": true,
-                  "filterPlaceholder": "Filter items ...",
-                  "multiLine": true,
-                  "constraints": {
-                    "allowedValues": "[map(steps('basics').armApiControls.subscriptionApi.value, (item) => parse(concat('{\"label\":\"', item.displayName, '\",\"value\":\"', item.subscriptionId, '\",\"description\":\"', 'ID: ', item.subscriptionId, '\"}')))]",
-                    "required": true
-                  }
                 }
               ]
             },
@@ -83,22 +67,6 @@
                 {
                   "name": "resourceGroupNameA",
                   "label": "Resource Group Name A",
-                  "type": "Microsoft.Common.TextBox",
-                  "defaultValue": "",
-                  "toolTip": "Specify a resource group name to create",
-                  "constraints": {
-                    "required": true,
-                    "validations": [
-                      {
-                        "regex": "^[-\\w\\._\\(\\)]{3,63}$",
-                        "message": "The resource group name must be 3-63 alphanumeric, underscore, parentheses, hyphen, period (except at end), and Unicode characters that match the allowed characters."
-                      }
-                    ]
-                  }
-                },
-                {
-                  "name": "resourceGroupNameB",
-                  "label": "Resource Group Name B",
                   "type": "Microsoft.Common.TextBox",
                   "defaultValue": "",
                   "toolTip": "Specify a resource group name to create",
@@ -125,9 +93,7 @@
       "parameters": {
         "location": "eastus",
         "subscriptionIdA": "[if(empty(steps('basics').subscriptionSection.subscriptionIdA), '', steps('basics').subscriptionSection.subscriptionIdA)]",
-        "subscriptionIdB": "[if(empty(steps('basics').subscriptionSection.subscriptionIdB), '', steps('basics').subscriptionSection.subscriptionIdB)]",
-        "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
-        "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]"
+        "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]"
         }
     }
   }
