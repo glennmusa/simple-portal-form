@@ -210,6 +210,27 @@
               ]
             }
           ]
+        },
+        {
+          "name": "tags",
+          "label": "Tags",
+          "subLabel": {
+            "preValidation": "Provide tags that will be used for all resources.",
+            "postValidation": "Done"
+          },
+          "bladeTitle": "Tags",
+          "bladeSubtitle": "Tags",
+          "elements": [
+            {
+              "name": "tagsByResource",
+              "label": "Tags by Resource",
+              "type": "Microsoft.Common.TagsByResource",
+              "visible": true,
+              "resources": [
+                "SimpleForm"
+              ]
+            }
+          ]
         }
       ]
     },
@@ -218,13 +239,14 @@
       "location": "[steps('basics').deploymentDetails.locationName]",
       "subscriptionId": "[steps('basics').deploymentDetails.subscriptionId]",
       "parameters": {
-        "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
-        "subscriptionIdA": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionId, '/subscriptions/', ''))]",
-        "subscriptionIdB": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionIdB, '/subscriptions/', ''))]",
-        "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
-        "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]",
-        "storageAccountNameA": "[if(empty(steps('basics').storageAccountSection.storageAccountNameA), '', steps('basics').storageAccountSection.storageAccountNameA)]",
-        "storageAccountNameB": "[if(empty(steps('basics').storageAccountSection.storageAccountNameB), '', steps('basics').storageAccountSection.storageAccountNameB)]"
+        "location": "[steps('basics').deploymentDetails.locationName]",
+        "subscriptionIdA": "[replace(steps('basics').deploymentDetails.subscriptionId, '/subscriptions/', '')]",
+        "subscriptionIdB": "[replace(steps('basics').deploymentDetails.subscriptionIdB, '/subscriptions/', '')]",
+        "resourceGroupNameA": "[steps('basics').resourceGroupSection.resourceGroupNameA]",
+        "resourceGroupNameB": "[steps('basics').resourceGroupSection.resourceGroupNameB]",
+        "storageAccountNameA": "[steps('basics').storageAccountSection.storageAccountNameA]",
+        "storageAccountNameB": "[steps('basics').storageAccountSection.storageAccountNameB]",
+        "tags": "[steps('tags').tagsByResource]"
       }
     }
   }
