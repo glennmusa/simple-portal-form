@@ -109,6 +109,7 @@
       "subscriptionId": "[steps('basics').deploymentDetails.subscriptionId]",
       "parameters": {
         "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
+        "subscriptionIdA": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', steps('basics').deploymentDetails.subscriptionId)]",
         "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]"
       }
     }

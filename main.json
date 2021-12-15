@@ -5,11 +5,14 @@
     "_generator": {
       "name": "bicep",
       "version": "0.4.1008.15138",
-      "templateHash": "2605031195632596844"
+      "templateHash": "2272930104446502080"
     }
   },
   "parameters": {
     "location": {
+      "type": "string"
+    },
+    "subscriptionIdA": {
       "type": "string"
     },
     "resourceGroupNameA": {
@@ -22,6 +25,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2020-06-01",
       "name": "simple-rg-a",
+      "subscriptionId": "[parameters('subscriptionIdA')]",
       "location": "[deployment().location]",
       "properties": {
         "expressionEvaluationOptions": {
