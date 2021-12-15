@@ -212,20 +212,20 @@
           ]
         }
       ]
-    }
-  },
-  "outputs": {
-    "kind": "Subscription",
-    "location": "[steps('basics').deploymentDetails.locationName]",
-    "subscriptionId": "[steps('basics').deploymentDetails.subscriptionId]",
-    "parameters": {
-      "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
-      "subscriptionIdA": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionId, '/subscriptions/', ''))]",
-      "subscriptionIdB": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionIdB, '/subscriptions/', ''))]",
-      "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
-      "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]",
-      "storageAccountNameA": "[if(empty(steps('basics').storageAccountSection.storageAccountNameA), '', steps('basics').storageAccountSection.storageAccountNameA)]",
-      "storageAccountNameB": "[if(empty(steps('basics').storageAccountSection.storageAccountNameB), '', steps('basics').storageAccountSection.storageAccountNameB)]"
+    },
+    "outputs": {
+      "kind": "Subscription",
+      "location": "[steps('basics').deploymentDetails.locationName]",
+      "subscriptionId": "[steps('basics').deploymentDetails.subscriptionId]",
+      "parameters": {
+        "location": "[if(empty(steps('basics').deploymentDetails.locationName), '', steps('basics').deploymentDetails.locationName)]",
+        "subscriptionIdA": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionId, '/subscriptions/', ''))]",
+        "subscriptionIdB": "[if(empty(steps('basics').deploymentDetails.subscriptionId), '', replace(steps('basics').deploymentDetails.subscriptionIdB, '/subscriptions/', ''))]",
+        "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]",
+        "resourceGroupNameB": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameB), '', steps('basics').resourceGroupSection.resourceGroupNameB)]",
+        "storageAccountNameA": "[if(empty(steps('basics').storageAccountSection.storageAccountNameA), '', steps('basics').storageAccountSection.storageAccountNameA)]",
+        "storageAccountNameB": "[if(empty(steps('basics').storageAccountSection.storageAccountNameB), '', steps('basics').storageAccountSection.storageAccountNameB)]"
+      }
     }
   }
 }
