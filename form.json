@@ -13,7 +13,7 @@
               "name": "basicsDescriptionTextBlock",
               "type": "Microsoft.Common.TextBlock",
               "options": {
-                "text": "This is a simple form that deploys a resource group and a storage account.",
+                "text": "This is a simple form that is not a wizard that deploys a resource group and a storage account.",
                 "link": {
                   "label": "https://github.com/glennmusa/simple-portal-form",
                   "uri": "https://github.com/glennmusa/simple-portal-form"
