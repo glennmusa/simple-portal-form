@@ -93,7 +93,7 @@
         "location": "eastus",
         "subscriptionIdA": "[if(empty(steps('basics').subscriptionSection.subscriptionIdA), '', steps('basics').subscriptionSection.subscriptionIdA)]",
         "resourceGroupNameA": "[if(empty(steps('basics').resourceGroupSection.resourceGroupNameA), '', steps('basics').resourceGroupSection.resourceGroupNameA)]"
-        }
+      }
     }
   }
 }
